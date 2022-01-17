@@ -9,15 +9,49 @@
 * [Default.aspx](./CS/WebSite/Default.aspx) (VB: [Default.aspx](./VB/WebSite/Default.aspx))
 * [Default.aspx.cs](./CS/WebSite/Default.aspx.cs) (VB: [Default.aspx.vb](./VB/WebSite/Default.aspx.vb))
 <!-- default file list end -->
-# A general technique of using cascading ASPxComboBoxes
+# Cascading Comboboxes for ASP.NET Web Forms
 <!-- run online -->
 **[[Run Online]](https://codecentral.devexpress.com/e2355/)**
 <!-- run online end -->
 
+This demo shows how to implement cascading comboboxes.
 
-<p>This demo illustrates a general technique of using cascading ASPxComboBoxes:</p>
-<p>1) Handle the parent ASPxClientComboBox's <a href="http://documentation.devexpress.com/#AspNet/DevExpressWebASPxEditorsScriptsASPxClientComboBox_SelectedIndexChangedtopic">SelectedIndexChanged</a> event and perform the child ASPxComboBox's callback via the ASPxClientComboBox's <a href="http://documentation.devexpress.com/#AspNet/DevExpressWebASPxEditorsScriptsASPxClientComboBox_PerformCallbacktopic">PerformCallback</a> method;<br> 2) Handle the child ASPxComboBox's <a href="https://documentation.devexpress.com/#AspNet/DevExpressWebASPxAutoCompleteBoxBase_Callbacktopic">Callback</a> event and bind the child ASPxComboBox with the datasource, based on the parent ASPxComboBox's <a href="http://documentation.devexpress.com/#AspNet/DevExpressWebASPxEditorsASPxComboBox_SelectedItemtopic">SelectedItem</a> / <a href="http://documentation.devexpress.com/#AspNet/DevExpressWebASPxEditorsASPxComboBox_SelectedIndextopic">SelectedIndex</a> property.</p>
+![example demo](demo.gif)
 
-<br/>
+To implement cascading comboboxes do the following:
+
+1. Create two comboboxes. The parent combobox (cmbCountry) dynamically populates the child combobox (cmbCity) with values, that correspond with the parent's currently selected item.
+2. Create two data sources---the parent data source and the child data source---and bind them to the respective comboboxes.
+3. Perform a callback on the child combobox in the parent's client-side SelectedIndexChanged event handler. Pass the new item's value to the server in a callback parameter.
+``` xml
+<dx:ASPxComboBox runat="server" ID="CmbCountry" DropDownStyle="DropDownList" 
+    DataSourceID="CountryDataSource" TextField="Country" ValueField="Country">
+    <ClientSideEvents 
+        SelectedIndexChanged="function(s, e) { 
+            OnCountryChanged(s); 
+        }
+    "/>
+</dx:ASPxComboBox>
+ ```
+
+```js
+function OnCountryChanged(cmbCountry) {
+    cmbCity.PerformCallback(cmbCountry.GetSelectedItem().value.toString());
+}
+ ```
+
+4. Update the child's data source with the new item's value. Bind the child combobox to the updated data source in the Callback handler. 
+``` c#
+protected void CmbCity_Callback(object source, DevExpress.Web.CallbackEventArgsBase e) {
+    FillCityCombo(e.Parameter);
+}
+
+protected void FillCityCombo(string country) {
+    if (string.IsNullOrEmpty(country)) return;
+    CityDataSource.SelectParameters[0].DefaultValue = country;
+    CmbCity.DataBind();
+    CmbCity.SelectedIndex = 0;
+}
+```
 
 
