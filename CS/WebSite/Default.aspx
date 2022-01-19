@@ -6,44 +6,47 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Cascading ASPxComboBoxes</title>
     <script type="text/javascript" language="javascript">
-    function OnCountryChanged(cmbCountry) {
-        cmbCity.PerformCallback(cmbCountry.GetSelectedItem().value.toString());
-    }
+        function OnCountryChanged(combo) {
+            cityCombo.PerformCallback(combo.GetSelectedItem().value.toString());
+        }
     </script>
 </head>
 <body>
     <form id="form1" runat="server">
         <div style="display: flex; flex-direction: row; gap: 10px;">
+            <!--Country Combobox-->
             <div>
-                <dx:ASPxLabel runat="server" Text="Country"/>
-                <dx:ASPxComboBox runat="server" ID="CmbCountry" DropDownStyle="DropDownList" 
-                    DataSourceID="CountryDataSource" TextField="Country" ValueField="Country">
-                    <ClientSideEvents 
-                        SelectedIndexChanged="function(s, e) { 
-                            OnCountryChanged(s); 
-                        }
-                    "/>
+                <dx:ASPxComboBox runat="server" ID="CountryCombo" ClientInstanceName="countryCombo" DataSourceID="CountryDataSource"
+                    DropDownStyle="DropDownList" TextField="Country" ValueField="Country" Caption="Country">
+                    <ClientSideEvents SelectedIndexChanged="function(s,e){OnCountryChanged(s);}"/>
+                    <CaptionSettings Position="Top" ShowColon="false"/>
                 </dx:ASPxComboBox>
             </div>
 
+            <!--City Combobox-->
             <div>
-                <dx:ASPxLabel runat="server" Text="City"/>
-                <dx:ASPxComboBox runat="server" ID="CmbCity" ClientInstanceName="cmbCity" OnCallback="CmbCity_Callback" DropDownStyle="DropDownList" 
-                    DataSourceID="CityDataSource" TextField="City" ValueField="City">
+                <dx:ASPxComboBox runat="server" ID="CityCombo" ClientInstanceName="cityCombo" DataSourceID="CityDataSource" OnCallback="CityCombo_Callback"
+                    DropDownStyle="DropDownList" TextField="City" ValueField="City" Caption="City">
+                    <CaptionSettings Position="Top" ShowColon="False" />
                 </dx:ASPxComboBox>
             </div>
-
-        
         </div>
 
+        <!--Data Sources-->
         <asp:SqlDataSource ID="CountryDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:WorldCitiesConnection %>" ProviderName="<%$ ConnectionStrings:WorldCitiesConnection.ProviderName %>" SelectCommand="SELECT * FROM [Countries]"/>
-        <asp:SqlDataSource ID="CityDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:WorldCitiesConnection %>" ProviderName="<%$ ConnectionStrings:WorldCitiesConnection.ProviderName %>" SelectCommand="SELECT c.City FROM [Cities] c, [Countries] cr WHERE (c.CountryId = cr.CountryId) AND (cr.Country = ?) order by c.City">
+        <asp:SqlDataSource ID="CityDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:WorldCitiesConnection %>" ProviderName="<%$ ConnectionStrings:WorldCitiesConnection.ProviderName %>" 
+            SelectCommand="
+                SELECT ct.City 
+                FROM [Cities] ct, [Countries] cntr 
+                WHERE (ct.CountryId = cntr.CountryId) AND (cntr.Country = @CountryName) 
+                    order by ct.City">
             <SelectParameters>
-                <asp:Parameter Name="?" />
+                <asp:Parameter Name="CountryName" />
             </SelectParameters>
         </asp:SqlDataSource>
+    
     </form>
 </body>
 </html>
