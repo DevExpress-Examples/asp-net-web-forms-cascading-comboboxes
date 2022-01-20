@@ -24,14 +24,14 @@ The general technique for implementing cascading [ASPxComboBoxes](https://docs.d
 1. In the [SelectedIndexChanged](https://docs.devexpress.com/AspNet/js-ASPxClientComboBox.SelectedIndexChanged) event handler of the first [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox), perform callback on the second [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox) using the [PerformCallback](https://docs.devexpress.com/AspNet/js-ASPxClientCallback.PerformCallback(parameter)) method. Pass the first [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox)'s value to the server in a [callback parameter](https://docs.devexpress.com/AspNet/js-ASPxClientCallback.PerformCallback(parameter)#parameters).
 ```xml
 <script type="text/javascript" language="javascript">
-    function OnCountryChanged() {
-        cityCombo.PerformCallback(countryCombo.GetSelectedItem().value.toString());
+    function OnCountryChanged(combo) {
+        cityCombo.PerformCallback(combo.GetSelectedItem().value.toString());
     }
     
     ...
 
 <dx:ASPxComboBox runat="server" ID="CountryCombo" ClientInstanceName="countryCombo" ...>
-    <ClientSideEvents SelectedIndexChanged="OnCountryChanged"/>
+    <ClientSideEvents SelectedIndexChanged="function(s,e){OnCountryChanged(s);}"/>
     ...
 ```
 2. In the server-side [Callback](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxCallback.Callback) event handler of the second [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox), update the data source using the value passed in the [callback parameter](https://docs.devexpress.com/AspNet/js-ASPxClientCallback.PerformCallback(parameter)#parameters) as a filter.
