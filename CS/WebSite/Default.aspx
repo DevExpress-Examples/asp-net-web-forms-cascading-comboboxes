@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Cascading ASPxComboBoxes</title>
-    <script type="text/javascript" language="javascript">
+    <script>
         function OnCountryChanged(combo) {
             cityCombo.PerformCallback(combo.GetSelectedItem().value.toString());
         }

@@ -18,7 +18,7 @@ public partial class _Default : System.Web.UI.Page {
         CityDataSource.SelectParameters["CountryName"].DefaultValue = country;
         CityCombo.DataBind();
 
-        //Select the first city in a list
+        //Select the first city in a list.
         CityCombo.SelectedIndex = 0;
     }
 }
