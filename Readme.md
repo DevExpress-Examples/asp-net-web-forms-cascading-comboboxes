@@ -8,12 +8,12 @@
 **[[Run Online]](https://codecentral.devexpress.com/e2355/)**
 <!-- run online end -->
 
-This demo shows how to use two [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox) editors to implement cascading combo boxes. In the demo, a selection in the first combo box (Country) filters the item list of the second combo box (City).
+This demo shows how to use two [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox) editors to implement cascading combo boxes. In the demo, the selection in the first combo box (Country) filters the item list of the second combo box (City).
 
 ![example demo](demo.gif)
 
-Use the following technique to setup a cascade of the [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox) editors:  
-**Respond to a selection change** of the first combo box (in its client [SelectedIndexChanged](https://docs.devexpress.com/AspNet/js-ASPxClientComboBox.SelectedIndexChanged) event) and **initiate a callback request** for the second combo box to **filter data source items** on the server (use a combination of the client [PerformCallback](https://docs.devexpress.com/AspNet/js-ASPxClientCallback.PerformCallback(parameter)) method and the server [Callback](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxCallback.Callback) event).
+Use the following technique to setup a cascade of [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox) editors:  
+**Respond to a selection change** of the first combo box (in its client [SelectedIndexChanged](https://docs.devexpress.com/AspNet/js-ASPxClientComboBox.SelectedIndexChanged) event) and **initiate a callback request** for the second combo box to **filter data source items** on the server (use a combination of the client [PerformCallback](https://docs.devexpress.com/AspNet/js-ASPxClientCallback.PerformCallback(parameter)) method and server [Callback](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxCallback.Callback) event).
 
 ## Setup Combo Boxes and Their Data Sources
 Create two [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox) editors and define their data sources ([SqlDataSource](https://docs.microsoft.com/en-us/dotnet/api/system.web.ui.webcontrols.sqldatasource?view=netframework-4.8) instances in this sample). Implement a [select parameter](https://docs.microsoft.com/en-us/dotnet/api/system.web.ui.webcontrols.parameter?view=netframework-4.8) for the second combo box's data source to dynamically filter its items based on the first combo box's selected value.
