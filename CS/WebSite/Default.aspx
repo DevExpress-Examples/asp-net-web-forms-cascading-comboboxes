@@ -8,8 +8,8 @@
 <head runat="server">
     <title>Cascading ASPxComboBoxes</title>
     <script>
-        function OnCountryChanged(combo) {
-            cityCombo.PerformCallback(combo.GetSelectedItem().value.toString());
+        function OnCountryChanged(selectedValue) {
+            cityCombo.PerformCallback(selectedValue);
         }
     </script>
 </head>
@@ -20,17 +20,13 @@
             <div>
                 <dx:ASPxComboBox runat="server" ID="CountryCombo" ClientInstanceName="countryCombo" DataSourceID="CountryDataSource"
                     DropDownStyle="DropDownList" TextField="Country" ValueField="Country" Caption="Country">
-                    <ClientSideEvents SelectedIndexChanged="function(s,e){OnCountryChanged(s);}"/>
-                    <CaptionSettings Position="Top" ShowColon="false"/>
+                    <ClientSideEvents SelectedIndexChanged="function(s,e){OnCountryChanged(s.GetSelectedItem().value.toString());}"/>
                 </dx:ASPxComboBox>
             </div>
 
             <!--City Combobox-->
             <div>
-                <dx:ASPxComboBox runat="server" ID="CityCombo" ClientInstanceName="cityCombo" DataSourceID="CityDataSource" OnCallback="CityCombo_Callback"
-                    DropDownStyle="DropDownList" TextField="City" ValueField="City" Caption="City">
-                    <CaptionSettings Position="Top" ShowColon="False" />
-                </dx:ASPxComboBox>
+                <dx:ASPxComboBox runat="server" ID="CityCombo" ClientInstanceName="cityCombo" DataSourceID="CityDataSource" OnCallback="CityCombo_Callback" TextField="City" ValueField="City" Caption="City"/>
             </div>
         </div>
 
