@@ -1,47 +1,48 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" %>
-<%@ Register Assembly="DevExpress.Web.v13.1, Version=13.1.14.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
-    Namespace="DevExpress.Web.ASPxPanel" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.Web.v13.1, Version=13.1.14.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
-    Namespace="DevExpress.Web.ASPxRoundPanel" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.Web.v13.1, Version=13.1.14.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
-    Namespace="DevExpress.Web.ASPxEditors" TagPrefix="dx" %>
+<%@ Register Assembly="DevExpress.Web.v21.2, Version=21.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
+    Namespace="DevExpress.Web" TagPrefix="dx" %>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
-    <script type="text/javascript" language="javascript">
-    function OnCountryChanged(cmbCountry) {
-        cmbCity.PerformCallback(cmbCountry.GetSelectedItem().value.toString());
-    }
+    <title>Cascading ASPxComboBoxes</title>
+    <script>
+        function OnCountryChanged(selectedValue) {
+            cityCombo.PerformCallback(selectedValue);
+        }
     </script>
 </head>
 <body>
     <form id="form1" runat="server">
-        <table>
-            <tr>
-                <td>
-                    <dx:ASPxComboBox runat="server" ID="CmbCountry" DropDownStyle="DropDownList" DataSourceID="AccessDataSourceCountry"
-                        TextField="Country" ValueField="Country">
-                        <ClientSideEvents SelectedIndexChanged="function(s, e) { OnCountryChanged(s); }"></ClientSideEvents>
-                    </dx:ASPxComboBox>
-                </td>
-                <td>
-                    <dx:ASPxComboBox runat="server" ID="CmbCity" ClientInstanceName="cmbCity" OnCallback="CmbCity_Callback"
-                        DropDownStyle="DropDownList" DataSourceID="AccessDataSourceCities" TextField="City"
-                        ValueField="City">
-                    </dx:ASPxComboBox>
-                </td>
-            </tr>
-        </table>
-        <asp:AccessDataSource ID="AccessDataSourceCountry" runat="server" DataFile="~/App_Data/WorldCities.mdb"
-            SelectCommand="SELECT * FROM [Countries]">
-        </asp:AccessDataSource>
-        <asp:AccessDataSource ID="AccessDataSourceCities" runat="server" DataFile="~/App_Data/WorldCities.mdb"
-            SelectCommand="SELECT c.City FROM [Cities] c, [Countries] cr WHERE (c.CountryId = cr.CountryId) AND (cr.Country = ?) order by c.City">
+        <div style="display: flex; flex-direction: row; gap: 10px;">
+            <!--Country Combobox-->
+            <div>
+                <dx:ASPxComboBox runat="server" ID="CountryCombo" ClientInstanceName="countryCombo" DataSourceID="CountryDataSource"
+                    DropDownStyle="DropDownList" TextField="Country" ValueField="Country" Caption="Country">
+                    <ClientSideEvents SelectedIndexChanged="function(s,e){OnCountryChanged(s.GetSelectedItem().value.toString());}"/>
+                </dx:ASPxComboBox>
+            </div>
+
+            <!--City Combobox-->
+            <div>
+                <dx:ASPxComboBox runat="server" ID="CityCombo" ClientInstanceName="cityCombo" DataSourceID="CityDataSource" OnCallback="CityCombo_Callback" TextField="City" ValueField="City" Caption="City"/>
+            </div>
+        </div>
+
+        <!--Data Sources-->
+        <asp:SqlDataSource ID="CountryDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:WorldCitiesConnection %>" ProviderName="<%$ ConnectionStrings:WorldCitiesConnection.ProviderName %>" SelectCommand="SELECT * FROM [Countries]"/>
+        <asp:SqlDataSource ID="CityDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:WorldCitiesConnection %>" ProviderName="<%$ ConnectionStrings:WorldCitiesConnection.ProviderName %>" 
+            SelectCommand="
+                SELECT ct.City 
+                FROM [Cities] ct, [Countries] cntr 
+                WHERE (ct.CountryId = cntr.CountryId) AND (cntr.Country = @CountryName) 
+                    order by ct.City">
             <SelectParameters>
-                <asp:Parameter Name="?" />
+                <asp:Parameter Name="CountryName" />
             </SelectParameters>
-        </asp:AccessDataSource>
+        </asp:SqlDataSource>
+    
     </form>
 </body>
 </html>
