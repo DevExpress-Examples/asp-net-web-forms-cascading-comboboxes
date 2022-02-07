@@ -4,9 +4,6 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
 # Combo Box for ASP.NET Web Forms - How to Implement Cascading Combo Boxes
-<!-- run online -->
-**[[Run Online]](https://codecentral.devexpress.com/128532327/)**
-<!-- run online end -->
 
 This demo shows how to use two [ASPxComboBox](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxComboBox) editors to implement cascading combo boxes. In the demo, the selection in the first combo box (Country) filters the item list of the second combo box (City).
 
